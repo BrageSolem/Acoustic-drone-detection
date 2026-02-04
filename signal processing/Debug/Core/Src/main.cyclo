@@ -1,0 +1,15 @@
+../Core/Src/main.c:96:6:FifoWrite	1
+../Core/Src/main.c:101:10:FifoRead	1
+../Core/Src/main.c:122:6:UART_Send_PCM_2CH	2
+../Core/Src/main.c:134:6:UART_Send_PCM_4CH	2
+../Core/Src/main.c:151:5:main	5
+../Core/Src/main.c:316:6:SystemClock_Config	3
+../Core/Src/main.c:363:6:PeriphCommonClock_Config	2
+../Core/Src/main.c:387:13:MX_CRC_Init	2
+../Core/Src/main.c:414:13:MX_SAI1_Init	3
+../Core/Src/main.c:489:13:MX_USART2_UART_Init	2
+../Core/Src/main.c:520:13:MX_DMA_Init	1
+../Core/Src/main.c:541:13:MX_GPIO_Init	1
+../Core/Src/main.c:594:6:HAL_SAI_RxHalfCpltCallback	3
+../Core/Src/main.c:603:6:HAL_SAI_RxCpltCallback	3
+../Core/Src/main.c:618:6:Error_Handler	1

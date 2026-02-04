@@ -1,0 +1,15 @@
+../Core/Src/main.c:96:6:FifoWrite	16	static
+../Core/Src/main.c:101:10:FifoRead	16	static
+../Core/Src/main.c:122:6:UART_Send_PCM_2CH	32	static
+../Core/Src/main.c:134:6:UART_Send_PCM_4CH	32	static
+../Core/Src/main.c:151:5:main	24	static
+../Core/Src/main.c:316:6:SystemClock_Config	88	static
+../Core/Src/main.c:363:6:PeriphCommonClock_Config	104	static
+../Core/Src/main.c:387:13:MX_CRC_Init	8	static
+../Core/Src/main.c:414:13:MX_SAI1_Init	8	static
+../Core/Src/main.c:489:13:MX_USART2_UART_Init	8	static
+../Core/Src/main.c:520:13:MX_DMA_Init	16	static
+../Core/Src/main.c:541:13:MX_GPIO_Init	48	static
+../Core/Src/main.c:594:6:HAL_SAI_RxHalfCpltCallback	16	static
+../Core/Src/main.c:603:6:HAL_SAI_RxCpltCallback	16	static
+../Core/Src/main.c:618:6:Error_Handler	4	static,ignoring_inline_asm
