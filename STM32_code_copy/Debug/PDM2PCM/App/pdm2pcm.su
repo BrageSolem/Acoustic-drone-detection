@@ -1,0 +1,2 @@
+../PDM2PCM/App/pdm2pcm.c:47:6:MX_PDM2PCM_Init	16	static
+../PDM2PCM/App/pdm2pcm.c:78:9:MX_PDM2PCM_Process	16	static
