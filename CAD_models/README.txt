@@ -1,0 +1,1 @@
+The stm32 model was taken from https://www.snapeda.com/parts/NUCLEO-F446RE/STMicroelectronics/view-part/?company=NTNU&amp;welcome=home&amp;ref=digikey
