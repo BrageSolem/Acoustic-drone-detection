@@ -1,0 +1,43 @@
+------------------------
+Pair: 1–2
+aggregated_time_delay: 2.3013259051707184e-06
+fs: 23437.5
+max_lag_samples: 7
+confidence median: 5.562577885457088 confidence max: 30.172508709239633
+lag in samples:  0.053937325902438715
+------------------------
+Pair: 1–3
+aggregated_time_delay: 1.1428939364706215e-05
+fs: 23437.5
+max_lag_samples: 7
+confidence median: 3.5291884081512133 confidence max: 19.378819163143692
+lag in samples:  0.2678657663603019
+------------------------
+Pair: 1–4
+aggregated_time_delay: 1.2844886947635435e-05
+fs: 23437.5
+max_lag_samples: 7
+confidence median: 3.351078928820699 confidence max: 21.544749667245185
+lag in samples:  0.3010520378352055
+------------------------
+Pair: 2–3
+aggregated_time_delay: 6.633677320252901e-06
+fs: 23437.5
+max_lag_samples: 7
+confidence median: 3.4919085147897357 confidence max: 17.927200988205513
+lag in samples:  0.15547681219342735
+------------------------
+Pair: 2–4
+aggregated_time_delay: 5.226953706128067e-06
+fs: 23437.5
+max_lag_samples: 7
+confidence median: 3.552279300484461 confidence max: 15.121096027197964
+lag in samples:  0.12250672748737657
+------------------------
+Pair: 3–4
+aggregated_time_delay: 2.4048097044530244e-06
+fs: 23437.5
+max_lag_samples: 7
+confidence median: 4.608221866070788 confidence max: 20.372812113785642
+lag in samples:  0.05636272744811776
+max abs: 18943 18693 17939 18117
