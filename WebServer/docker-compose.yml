@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  pi1:
+    build: .
+    container_name: pi1
+    environment:
+      - PI_ID=PI_1
+      - PEERS=pi2,pi3
+    ports:
+      - "3001:3000"
+
+  pi2:
+    build: .
+    container_name: pi2
+    environment:
+      - PI_ID=PI_2
+      - PEERS=pi1,pi3
+    ports:
+      - "3002:3000"
+
+  pi3:
+    build: .
+    container_name: pi3
+    environment:
+      - PI_ID=PI_3
+      - PEERS=pi1,pi2
+    ports:
+      - "3003:3000"
