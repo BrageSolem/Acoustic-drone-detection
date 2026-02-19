@@ -18,7 +18,6 @@ const PEERS = (process.env.PEERS || "").split(",").filter(Boolean);
 let identifiedDrones = [];
 let peerSockets = [];
 
-// ---- Connect to peers ----
 function connectToPeers() {
     PEERS.forEach(peer => {
         const socket = ioClient(`http://${peer}:3000`);
