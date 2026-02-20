@@ -27,11 +27,19 @@ body {
     margin-bottom: 20px;
 }
 
+.video-container {
+    max-width: 70%;
+    max-height: 30%;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .video {
-    width: 70%;
-    height: 30%;
-    background: #333;
-    color: white;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;

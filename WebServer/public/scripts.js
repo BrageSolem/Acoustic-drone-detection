@@ -3,6 +3,7 @@ let drones = [];
 let markers = [];
 const map = L.map('map').setView([0, 0], 2);
 
+window.addEventListener("load",init)
 socket.on("initData", (data) => {
     drones = data.drones;
     render();
@@ -12,6 +13,11 @@ socket.on("updateDrones", (data) => {
     drones = data;
     render();
 });
+function init() {
+    showMyLocation();
+    startCameraFeed();
+}
+
 
 function getCurrentPosition(options = {}) {
     return new Promise((resolve, reject) => {
@@ -92,6 +98,18 @@ async function addDrone() { // Simulate Drone Detection
 
     socket.emit("newDrone", newDrone);
 }
+
+async function startCameraFeed() { //To be implemented with proper camera feed
+    const videoElement = document.getElementById('droneVideo');
+
+    try {
+        videoElement.srcObject = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        videoElement.play();
+    } catch (err) {
+        console.error("Error accessing media devices:", err);
+    }
+}
+
 
 function render() {
     const list = document.getElementById("droneList");

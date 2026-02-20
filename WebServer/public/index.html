@@ -12,7 +12,7 @@
             href="styles.css"
     />
 </head>
-<body onload="showMyLocation()">
+<body>
 
 <div class="sidebar">
     <h3>Noise Sounds List</h3>
@@ -23,7 +23,9 @@
 
 <div class="center">
     <div id="map"></div>
-    <div class="video">VIDEO FEED</div>
+    <div class="video-container">
+        <video class="video" id ="droneVideo" autoplay></video>
+    </div>
     <button onclick="addDrone()">Simulate Drone Detection</button>
 </div>
 
