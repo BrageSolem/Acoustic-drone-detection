@@ -1,6 +1,9 @@
 from receivers.stm32_usb_receiver import STM32UsbReceiver
 from data_set_tools.create_wav_file import WavCreation
 
+
+"WORK IN PROGRESS !!"
+
 receiver = STM32UsbReceiver()
 wav_conversion = WavCreation()
 

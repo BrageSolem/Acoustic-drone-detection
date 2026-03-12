@@ -11,7 +11,7 @@ audio_file = "mic_recording_usb.wav"
 #https://librosa.org/doc/main/generated/librosa.feature.mfcc.html
 # to some degree based on
 
-signal, fs = librosa.load(audio_file, sr=20000) 
+signal, fs = librosa.load(audio_file) 
 # Sample much higher than max frequency if spectral accuracy matters
 
 print("fs:", fs)

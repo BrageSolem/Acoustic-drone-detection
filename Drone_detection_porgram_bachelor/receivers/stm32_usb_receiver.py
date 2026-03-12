@@ -74,7 +74,7 @@ class STM32UsbReceiver :
             return self.samples
 
         else:
-            print("THE PORT WAS NOT OPENED! Use open_port().")
+            raise RuntimeError("THE PORT WAS NOT OPENED! Use open_port().")
 
     def debug_export (self, plot_debug = False):
         samples_dict = {}
