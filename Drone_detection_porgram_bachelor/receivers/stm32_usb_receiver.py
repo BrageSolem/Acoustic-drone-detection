@@ -1,10 +1,6 @@
 import serial
 import numpy as np
-import pandas as pd
 import time
-import matplotlib.pyplot as plt
-
-
 
 class STM32UsbReceiver :
     def __init__(self, port = "COM6", baud = 921600 , sync= b'\x5A\xA5', channels = 4, frame_samples = 16, duration_sec = 1, linux = False):
@@ -42,7 +38,7 @@ class STM32UsbReceiver :
 
             print("Recording..")
             self.start_time = time.time()
-            
+            self.samples = [[] for _ in range(self.channels)] #reset the samples before recording any new values
             
             while time.time() - self.start_time < self.duration_sec :
                 data = self.ser.read(512) # 512 bytes
@@ -71,7 +67,7 @@ class STM32UsbReceiver :
                     for channel in range(self.channels):
                         self.samples[channel].extend(samples[channel::self.channels])
 
-            return self.samples
+            return np.array(self.samples)
 
         else:
             raise RuntimeError("THE PORT WAS NOT OPENED! Use open_port().")

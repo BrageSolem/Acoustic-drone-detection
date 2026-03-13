@@ -32,7 +32,7 @@ class ReceiverDebug:
             
             plt.tight_layout()
             plt.savefig(f'debug_figures/Debug_receiver_data{int(self.receiver.start_time)}.png')
-
+            plt.show()
+            
         df = pd.DataFrame(samples_dict)
-
         df.to_csv("debug_csv_files/mic_recording_usb.csv", index=False) 

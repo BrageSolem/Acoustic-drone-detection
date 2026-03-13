@@ -23,14 +23,14 @@ class MFCCExtractor:
         self.signal_time_domain = None
         
 
-    def convert_wav_to_signal(self, audio_file):
+    def _convert_wav_to_signal(self, audio_file):
         self.signal, self.fs = librosa.load(audio_file, sr = None)
         self.signal_time_domain = self.signal
 
-    def get_preemphasised_signal(self):
+    def _get_preemphasised_signal(self):
         return librosa.effects.preemphasis(self.signal)
     
-    def mfcc_after_preemphasis(self):
+    def _mfcc_after_preemphasis(self):
         signal_preemphasised = self.get_preemphasised_signal()
 
         self.mfcc = librosa.feature.mfcc(
@@ -43,7 +43,7 @@ class MFCCExtractor:
             n_mels = self.n_mels
         )
 
-    def get_mfcc_features(self):
+    def _get_mfcc_features(self):
         if self.signal is not None:
             mfcc_delta = librosa.feature.delta(self.mfcc)
             mfcc_delta2 = librosa.feature.delta(self.mfcc, order=2)
@@ -51,7 +51,7 @@ class MFCCExtractor:
         else:
             raise ValueError("The signal is empty! Run mfcc_after_preemphasis()")
     
-    def create_mel_spec(self):
+    def _create_mel_spec(self):
         self.mel_spec = librosa.feature.melspectrogram(
             y = self.signal,
             sr = self.fs,
@@ -62,14 +62,15 @@ class MFCCExtractor:
             power = 2
         )
 
-    def power_mel_spec(self):
+    def _power_mel_spec(self):
         self.log_mel_spec = librosa.power_to_db(self.mel_spec, ref=np.max)
 
-    def accumulate_the_stats(self):
+    def _accumulate_the_stats(self):
         logmel_stats = np.hstack([self.log_mel_spec.mean(axis=1), self.log_mel_spec.std(axis=1)])
         mfcc_stats = np.hstack([self.mfcc.mean(axis=1),self.mfcc.std(axis=1)])
         self.acc_features = np.hstack([logmel_stats,mfcc_stats])
 
+# public
     def extract_features(self, audio_file):
         self.convert_wav_to_signal(audio_file)
         self.mfcc_after_preemphasis()
