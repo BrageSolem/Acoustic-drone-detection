@@ -8,7 +8,7 @@ class FeatureExporter:
             if not isinstance(extractor, MFCCExtractor):
                  raise TypeError("extracotr must be of MFCCExtractor")
             
-        def df_features(self, filename="logmel_features.csv"):
+        def df_features(self, filename="recordings/logmel_features.csv"):
 
             if self.extractor.acc_features is None:
                 raise ValueError("No features available. Run Run extract_features() from mfcc_extraction")

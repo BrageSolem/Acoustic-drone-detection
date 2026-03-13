@@ -76,30 +76,5 @@ class STM32UsbReceiver :
         else:
             raise RuntimeError("THE PORT WAS NOT OPENED! Use open_port().")
 
-    def debug_export (self, plot_debug = False):
-        samples_dict = {}
-
-        for channel in range(self.channels):
-            name = f"mic{channel+1}"
-            samples_dict[name] = np.array(self.samples[channel])
-
-        if plot_debug:
-
-            plt.figure()
-
-            for channel in range(self.channels):
-                
-                name = f"mic{channel+1}"
-
-                plt.subplot(self.channels,1,channel + 1)
-                plt.plot(samples_dict[name][:2000])
-                plt.title(f"Mic {channel + 1}")
-                print(f"Total samples mic{channel+1}: {len(samples_dict[name])}")
-            
-            plt.tight_layout()
-            plt.savefig(f'Debug_receiver_data{int(self.start_time)}.png')
-
-        df = pd.DataFrame(samples_dict)
-
-        df.to_csv("mic_recording_usb.csv", index=False) 
+    
             

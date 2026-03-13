@@ -1,15 +1,5 @@
 import numpy as np
 import librosa
-import librosa.display
-import matplotlib.pyplot as plt
-import pandas as pd
-
-#### #### ####
-"WORK IN PROGRESS!!"
-"HAS TO IMPROVE COHESION AND COUPLIG!"
-
-#### #### ## ### ##
-
 
 
 class MFCCExtractor:
@@ -30,10 +20,12 @@ class MFCCExtractor:
         self.mel_spec = None
         self.log_mel_spec = None
         self.acc_features =None
+        self.signal_time_domain = None
         
 
     def convert_wav_to_signal(self, audio_file):
         self.signal, self.fs = librosa.load(audio_file, sr = None)
+        self.signal_time_domain = self.signal
 
     def get_preemphasised_signal(self):
         return librosa.effects.preemphasis(self.signal)
@@ -50,7 +42,6 @@ class MFCCExtractor:
             win_length = self.win_length,
             n_mels = self.n_mels
         )
-
 
     def get_mfcc_features(self):
         if self.signal is not None:
@@ -86,8 +77,3 @@ class MFCCExtractor:
         self.power_mel_spec()
         self.accumulate_the_stats()
         return self.acc_features
-
-
-   
-
-  

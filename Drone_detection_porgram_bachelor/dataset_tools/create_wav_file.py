@@ -5,7 +5,7 @@ class WavCreation:
     def __init__(self, duration = 1):
         self.duration = duration
 
-    def convert_into_wav(self,samples):
+    def convert_into_wav(self,samples,filename ="recordings/mic_recording.wav" ):
         effective_fs = len(samples[0])/ self.duration
         stereo = np.stack(samples, axis=1)
-        write("mic_recording.wav",int(round(effective_fs)), stereo)
+        write(filename,int(round(effective_fs)), stereo)

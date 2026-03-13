@@ -1,21 +1,30 @@
+from mfcc_extraction import MFCCExtractor
+import matplotlib.pyplot as plt
+import librosa.display
 
 
+class FeatureVisualizer:
+    def __init__(self, extractor: MFCCExtractor):
+        self.extractor = extractor
+            
+    def plot_signal_time(self):
+        signal = self.extractor.signal_time_domain
+        if signal is not None:
+            plt.figure(figsize=(10,4))
+            plt.plot(signal)
+            plt.xlabel("Time (s)")
+            plt.ylabel("Amplitude")
+            plt.title("Signal plot (time–amplitude view)")
+            plt.tight_layout()
+            plt.show()
 
-
-
-"WORK IN PROGRESS!"
-
-
-
-
-
-def spectrogram(self):
-        if self.signal is not None:
+    def spectrogram(self):
+        if self.extractor.signal is not None:
             plt.figure(figsize=(10, 4))
-            plt.specgram(self.signal,
-                         self.n_fft, 
-                         self.fs, 
-                         noverlap=400,
+            plt.specgram(self.extractor.signal,
+                         self.extractor.n_fft, 
+                         self.extractor.fs, 
+                         noverlap=self.extractor.win_length - self.extractor.hop_length,
                          cmap = "magma")
                 
             plt.xlabel("Time (s)")
@@ -25,17 +34,19 @@ def spectrogram(self):
             plt.tight_layout()
             plt.show()
         else:
-            print("The signal is empty! Run mfcc_after_preemphasis()")
+            raise RuntimeError("Signal not loaded. Run extract_features() first.")
 
-def mel_spectogram(self):
-        if self.log_mel_spec is not None:
+    def mel_spectrogram(self):
+        if self.extractor.log_mel_spec is not None:
             plt.figure(figsize=(10, 4))
             librosa.display.specshow(
-                self.log_mel_spec,
+                self.extractor.log_mel_spec,
                 x_axis="time",
                 y_axis="mel",
-                sr=self.fs)
+                sr=self.extractor.fs)
             plt.colorbar(label="dB")
             plt.title("Log-Mel Spectrogram")
             plt.tight_layout()
             plt.show()
+        else:
+            raise RuntimeError("Signal not loaded. Run extract_features() first.")
