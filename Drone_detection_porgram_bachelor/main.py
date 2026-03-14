@@ -21,7 +21,7 @@ mfcc_extractor = MFCCExtractor()
 mfcc_exporter = FeatureExporter(extractor=mfcc_extractor)
 mfcc_visualizer = FeatureVisualizer(extractor=mfcc_extractor)
 
-gcc_processor = GCCProcessor(duration = receiver.duration_sec, channels = receiver.channels)
+gcc_processor = GCCProcessor()
 
 receiver.open_port()
 # add history buffer for 3 wav files back in time ?
@@ -34,8 +34,8 @@ while Run:
     
     mfcc_extractor.extract_features(audio_file="recordings/mic_recording.wav") # extract features such as mfcc, delta, delta2, log_mel_spec etc
     mfcc_exporter.df_features() # export the features into a df
-    gcc_processor.process(samples, mfcc_extractor.fs)
-    gcc_processor.
+    gcc_array = gcc_processor.process_signal(samples, mfcc_extractor.fs)
+
 
 
     if debug_mfcc:
