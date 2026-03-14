@@ -5,6 +5,7 @@ from features.feature_exporter import FeatureExporter
 from features.feature_visualizer import FeatureVisualizer
 from debug.stm32_usb_receiver_debug_tools import ReceiverDebug
 from gcc.gcc_processor import GCCProcessor
+from gcc.tdoa_estimator import TDOAEstimator
 
 "WORK IN PROGRESS !!"
 
@@ -13,7 +14,6 @@ debug_stm32 = False
 Run = True
 
 receiver = STM32UsbReceiver()
-receiver_debug = ReceiverDebug(receiver=receiver)
 
 wav_conversion = WavCreation()
 
@@ -22,6 +22,10 @@ mfcc_exporter = FeatureExporter(extractor=mfcc_extractor)
 mfcc_visualizer = FeatureVisualizer(extractor=mfcc_extractor)
 
 gcc_processor = GCCProcessor()
+tdoa_estimator = TDOAEstimator()
+
+#debug 
+receiver_debug = ReceiverDebug(receiver=receiver)
 
 receiver.open_port()
 # add history buffer for 3 wav files back in time ?

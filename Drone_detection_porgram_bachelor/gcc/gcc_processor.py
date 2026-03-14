@@ -47,7 +47,7 @@ class GCCProcessor:
         frames_frq_domain = fft(frames, axis=-1)
         return frames_frq_domain
     
-    def _generate_mic_pairs(self, n_mics): # is quite needed in the tdoa and doa
+    def generate_mic_pairs(self, n_mics): # is quite needed in the tdoa and doa
         return [(i,j) for i in range(n_mics) for j in range(i+1, n_mics)]
 
     def _cross_power_spectrum(self,frames_fft:np.ndarray):
@@ -58,7 +58,7 @@ class GCCProcessor:
         n_mics = frames_fft.shape[1]
 
         if self.mic_pairs is None:
-            self.mic_pairs = self._generate_mic_pairs(n_mics)
+            self.mic_pairs = self.generate_mic_pairs(n_mics)
         
         mic_pairs = self.mic_pairs
 
