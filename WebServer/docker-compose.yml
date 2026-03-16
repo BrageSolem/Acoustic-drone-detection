@@ -2,28 +2,89 @@ version: "3.9"
 
 services:
   pi1:
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      # HTTP -> HTTPS redirect
+      - "traefik.http.routers.pi1.rule=Host(`dronewebserver.duckdns.org`)"
+      - "traefik.http.routers.pi1.entrypoints=web"
+      - "traefik.http.routers.pi1.middlewares=redirect-to-https"
+      # HTTPS router
+      - "traefik.http.routers.pi1-secure.rule=Host(`dronewebserver.duckdns.org`)"
+      - "traefik.http.routers.pi1-secure.entrypoints=websecure"
+      - "traefik.http.routers.pi1-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pi1.loadbalancer.server.port=3000"
     build: .
     container_name: pi1
     environment:
       - PI_ID=PI_1
-      - PEERS=pi2,pi3
+      - PEERS=${PEERS:-}
     ports:
       - "3001:3000"
+    depends_on:
+      - traefik
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
-  pi2:
-    build: .
-    container_name: pi2
-    environment:
-      - PI_ID=PI_2
-      - PEERS=pi1,pi3
-    ports:
-      - "3002:3000"
+  # Uncomment this to test multi-instance peer discovery locally
+  # pi2:
+  #   networks:
+  #     - traefik
+  #   build: .
+  #   container_name: pi2
+  #   environment:
+  #     - PI_ID=PI_2
+  #     - PEERS=pi1
+  #   ports:
+  #     - "3002:3000"
+  #   depends_on:
+  #     - traefik
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+  #     interval: 30s
+  #     timeout: 5s
+  #     retries: 3
+  #     start_period: 10s
 
-  pi3:
-    build: .
-    container_name: pi3
-    environment:
-      - PI_ID=PI_3
-      - PEERS=pi1,pi2
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    command:
+      - "--api.dashboard=true"
+      - "--api.debug=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-admin@example.com}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
     ports:
-      - "3003:3000"
+      - "80:80"
+      - "443:443"
+      - "8080:8080" #dashboard
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.duckdns.org`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dashboard.service=api@internal"
+
+networks:
+  traefik:
+    external: false
+
+volumes:
+  letsencrypt:

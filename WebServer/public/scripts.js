@@ -90,7 +90,6 @@ async function addDrone() { // Simulate Drone Detection
         lat: droneLat,
         lng: droneLng
     };
-    console.log(map)
     L.marker([newDrone.lat, newDrone.lng])
         .addTo(map)
         .bindPopup("Drone:"+newDrone.id)

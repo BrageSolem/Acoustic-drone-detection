@@ -8,6 +8,9 @@ const app = express();
 app.use(cors());
 app.use(express.static("public"));
 
+// health endpoint for orchestrators/load-balancers
+app.get('/health', (req, res) => res.json({ status: 'ok', pi: process.env.PI_ID || 'PI_UNKNOWN' }));
+
 const server = http.createServer(app);
 const io = new Server(server);
 
