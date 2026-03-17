@@ -31,7 +31,7 @@ class MFCCExtractor:
         return librosa.effects.preemphasis(self.signal)
     
     def _mfcc_after_preemphasis(self):
-        signal_preemphasised = self.get_preemphasised_signal()
+        signal_preemphasised = self._get_preemphasised_signal()
 
         self.mfcc = librosa.feature.mfcc(
             y = signal_preemphasised,
@@ -72,9 +72,9 @@ class MFCCExtractor:
 
 # public
     def extract_features(self, audio_file):
-        self.convert_wav_to_signal(audio_file)
-        self.mfcc_after_preemphasis()
-        self.create_mel_spec()
-        self.power_mel_spec()
-        self.accumulate_the_stats()
+        self._convert_wav_to_signal(audio_file)
+        self._mfcc_after_preemphasis()
+        self._create_mel_spec()
+        self._power_mel_spec()
+        self._accumulate_the_stats()
         return self.acc_features

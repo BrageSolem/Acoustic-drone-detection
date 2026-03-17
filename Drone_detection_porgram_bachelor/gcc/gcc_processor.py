@@ -4,9 +4,11 @@ from scipy import signal
 
 
 class GCCProcessor:
-    def __init__(self, frame_ms = 32):
+    def __init__(self,frame_ms = 32):
         self.frame_ms = frame_ms
         self.mic_pairs = None
+        self.n_mics = None
+        self.fs = None
 
 
     def _frame_samples(self,samples: np.ndarray, samples_per_frame):
@@ -56,6 +58,7 @@ class GCCProcessor:
         cps = []
         n_frames = frames_fft.shape[0]
         n_mics = frames_fft.shape[1]
+        n_mics = self.n_mics
 
         if self.mic_pairs is None:
             self.mic_pairs = self.generate_mic_pairs(n_mics)
@@ -88,7 +91,8 @@ class GCCProcessor:
 
     
     def process_signal(self, samples: np.ndarray, fs): #samples has to be np.array to use .shape
-        samples_per_frame = int(fs * self.frame_ms / 1000)
+        self.fs = fs
+        samples_per_frame = int(self.fs * self.frame_ms / 1000)
         frames = self._frame_samples(samples, samples_per_frame)
         windowed_frames = self._window_each_frame(frames, samples_per_frame)
         frames_fft = self._fft_each_frame(windowed_frames)
