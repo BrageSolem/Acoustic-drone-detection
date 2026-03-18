@@ -48,6 +48,8 @@ while Run:
     mfcc_exporter.df_features() # export the features into a df
     gcc_array = gcc_processor.process_signal(samples, mfcc_extractor.fs)
     tdoa_estimator.set_gcc_array(gcc_array)
+    tdoa_estimator.set_fs(mfcc_exporter.fs)
+    
 
 
 
