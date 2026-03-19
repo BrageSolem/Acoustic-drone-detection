@@ -1,4 +1,4 @@
-from gcc.tdoa_estimator import TDOAEstimator
+from gcc.doa_estimator import TDOAEstimator
 from gcc.doa_estimator import DOAEstimator
 from gcc.gcc_processor import GCCProcessor
 import numpy as np

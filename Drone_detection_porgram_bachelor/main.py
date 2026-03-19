@@ -5,7 +5,7 @@ from features.feature_exporter import FeatureExporter
 from features.feature_visualizer import FeatureVisualizer
 from debug.stm32_usb_receiver_debug_tools import ReceiverDebug
 from gcc.gcc_processor import GCCProcessor
-from gcc.tdoa_estimator import TDOAEstimator
+from gcc.doa_estimator import DOAEstimator
 
 import numpy as np
 
@@ -30,7 +30,7 @@ mfcc_exporter = FeatureExporter(extractor=mfcc_extractor)
 mfcc_visualizer = FeatureVisualizer(extractor=mfcc_extractor)
 
 gcc_processor = GCCProcessor()
-tdoa_estimator = TDOAEstimator(p_vector, gcc_processor)
+doa_estimator = DOAEstimator(p_vector, gcc_processor)
 
 #debug 
 receiver_debug = ReceiverDebug(receiver=receiver)
@@ -47,10 +47,8 @@ while Run:
     mfcc_extractor.extract_features(audio_file="recordings/mic_recording.wav") # extract features such as mfcc, delta, delta2, log_mel_spec etc
     mfcc_exporter.df_features() # export the features into a df
     gcc_array = gcc_processor.process_signal(samples, mfcc_extractor.fs)
-    tdoa_estimator.set_gcc_array(gcc_array)
-    tdoa_estimator.set_fs(mfcc_exporter.fs)
-    
-
+    doa_estimator.set_gcc_array(gcc_array)
+    doa_estimator.estimate_DOA()
 
 
     if debug_mfcc:

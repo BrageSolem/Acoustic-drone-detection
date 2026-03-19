@@ -94,7 +94,7 @@ class GCCProcessor:
         self.fs = fs
         samples_per_frame = int(self.fs * self.frame_ms / 1000)
         frames = self._frame_samples(samples, samples_per_frame)
-        windowed_frames = self._window_each_frame(frames, samples_per_frame)
+        windowed_frames = self._window_each_frame(frames)
         frames_fft = self._fft_each_frame(windowed_frames)
         cps_array = self._cross_power_spectrum(frames_fft)
         gcc_array = self._p_hat_weighted_gcc(cps_array, fs, samples_per_frame)
