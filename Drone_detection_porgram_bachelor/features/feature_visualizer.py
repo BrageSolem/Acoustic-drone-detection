@@ -4,6 +4,14 @@ import librosa.display
 
 
 class FeatureVisualizer:
+    """
+    The class is mostly used for debug and visualization of the signal gathered by the system.
+    - Can visualize the raw signal in time domain,
+    - Generate a spectrogram 
+    - Generate a log - mel spectrogram
+    """
+
+
     def __init__(self, extractor: MFCCExtractor):
         self.extractor = extractor
             

@@ -15,6 +15,8 @@ debug_mfcc = False
 debug_stm32 = False
 Run = True
 
+# Position vector for 4 microphones
+# They are planned to be placed on the same height, and around 10 cm from the center of the tower
 p_vector = np.array([
     [-0.10,  0,     0.10,  0   ],  # x: mic1 left, mic3 right
     [ 0,    -0.10,  0,     0.10],  # y: mic2 bottom, mic4 top

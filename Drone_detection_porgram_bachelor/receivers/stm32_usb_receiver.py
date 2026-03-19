@@ -3,6 +3,24 @@ import numpy as np
 import time
 
 class STM32UsbReceiver :
+    """
+    receiver class that holds the following information:
+    - Reads framed audio data from Stm32 over USB cdc,
+    - Each frame fromat:
+     [2 bytes sync] +  [16 samples * 4 channels * 2 bytes],
+    - Two first bytes used for alignemnet 
+    - Stores data as:
+    [[ch1_0, ch1_1, ch1_2 ,..]
+     [ch2_0, ch2_1, ch2_2, ..]
+     [ch3_0, ch3_1, ch3_2, ...]
+     [ch4_0, ch4_1, ch4_2, ...]]
+    - each sample is int16 so 2 bytes
+    Has The following functions :
+    - open_port() which decides which port to read from
+    - close_port() to stop the communication through a port
+    - record() which records the frames and returns an array of samples 
+    """
+
     def __init__(self, port = "COM6", baud = 921600 , sync= b'\x5A\xA5', channels = 4, frame_samples = 16, duration_sec = 1, linux = False):
         if linux :
             self.port = b'/dev/ttyACM0'
