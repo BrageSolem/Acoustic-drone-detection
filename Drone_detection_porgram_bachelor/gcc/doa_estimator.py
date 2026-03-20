@@ -2,6 +2,31 @@ import numpy as np
 from gcc.gcc_processor import GCCProcessor
 
 class DOAEstimator():
+    """
+    The class estimated the direction of arrival (DOA) of a sound source using time difference of arraival (TDOA) derived from GCC processing
+
+    The program flow is as follows:
+    - compute geometry for the microphones by finding the baseline vectors between each microphone,
+    - set the gcc array from gcc_processor,
+    - For each microphone pair:
+        - limit the lag search range based on the physical constraints of the system,
+        - For each frame:
+            - Find the peak of the gcc function, which represents the estimated delay,
+            - Apply delta_newton interpolation to estimate the actual peak in proximity of the integer peak,
+            - Compute the confidence score based on the ratio between the segmnet peak value, and the avg values present in the segment,
+        - Keep 50% of the most reliable frames  in the segment,
+        - Aggregate the delays,
+    - Convert TDOAs into cone angles,
+    - Perform a grid search over possible azimuth agnles:
+        - COmpare predicted TDOAs with measured TDOAs,
+        - Select the angle that minimizes the total error  
+    
+    The result is an estimated azimuth direction of the sound source.
+    
+    """    
+
+
+
     def __init__(self, p_vector : np.ndarray, gcc_processor : GCCProcessor):
         self.p_vector = p_vector 
         self.gcc_processor = gcc_processor
@@ -105,8 +130,8 @@ class DOAEstimator():
 
             time_delays = lag_samples/fs 
             
-            k = max(1, int(np.ceil(keep_frac * self.n_frames))) # keep 50% of frames
-            indx = np.argsort(confidence)[-k:] # from the last frame as the first one
+            k = max(1, int(np.ceil(keep_frac * self.n_frames))) # keeps 50% of frames
+            indx = np.argsort(confidence)[-k:] # sorts all of the frames from lowest to the highest confidency score, and keeps the last k elements, which are the highest 
 
             aggregated_time_delay = np.median(time_delays[indx])
             self.aggregated_time_delay_list.append(aggregated_time_delay)
@@ -116,6 +141,8 @@ class DOAEstimator():
             cos_arg = np.clip((self.speed_of_sound * aggregated_time_delay) / baseline_vec_norm, -1, 1) # must ensure the cos will not be bigger or smaller then 1 or -1 
             cone_angle_rad = np.arccos(cos_arg)
             self.cone_angles.append(cone_angle_rad)
+
+            # Consider adding a filter to the angle, if the angle will be too unstable
 
         self.aggregated_time_delay_list = np.array(self.aggregated_time_delay_list)
         self.cone_angles = np.array(self.cone_angles)

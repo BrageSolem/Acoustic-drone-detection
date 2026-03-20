@@ -46,11 +46,41 @@ while Run:
     
     wav_conversion.convert_into_wav(samples) # convert the samples into a wav format
     
-    mfcc_extractor.extract_features(audio_file="recordings/mic_recording.wav") # extract features such as mfcc, delta, delta2, log_mel_spec etc
+    # features 
+    features = mfcc_extractor.extract_features(audio_file="recordings/mic_recording.wav") # extract features such as mfcc, delta, delta2, log_mel_spec etc
     mfcc_exporter.df_features() # export the features into a df
+    
+    # Direction
     gcc_array = gcc_processor.process_signal(samples, mfcc_extractor.fs)
     doa_estimator.set_gcc_array(gcc_array)
     doa_estimator.estimate_DOA()
+
+
+    """
+    #Simple example of rule based drone detection
+
+    mfcc_std = features[-13:] # last mfcc std
+    mfcc_std_mean = np.mean(mfcc_std)
+
+    is_drone = mfcc_std_mean < threshold    
+    
+
+    if i_drone:
+        angle = doa_estimator.estimated_azimuth_deg
+    else:
+        ignore
+
+    # then send the angle to the PID
+
+    """
+
+
+
+
+
+
+
+
 
 
     if debug_mfcc:

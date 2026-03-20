@@ -21,7 +21,7 @@ class STM32UsbReceiver :
     - record() which records the frames and returns an array of samples 
     """
 
-    def __init__(self, port = "COM6", baud = 921600 , sync= b'\x5A\xA5', channels = 4, frame_samples = 16, duration_sec = 1, linux = False):
+    def __init__(self, port = "COM6", baud = 921600 , sync= b'\x5A\xA5', channels = 4, frame_samples = 16, duration_sec = 0.300, linux = False):
         if linux :
             self.port = b'/dev/ttyACM0'
         else :
@@ -81,9 +81,12 @@ class STM32UsbReceiver :
                     rx_buf = rx_buf[sync_idx + self.frame_bytes:] # removes the processed frame 
 
                     samples = np.frombuffer(frame,dtype=np.int16) # interpret as signed int16
-
-                    for channel in range(self.channels):
-                        self.samples[channel].extend(samples[channel::self.channels])
+                    
+                    # vectorized 
+                    samples = samples.reshape(-1, self.channels)
+                    self.samples = [np.concatenate((self.samples[ch], samples[:,ch])) for ch in range(self.channels)]
+                    #for channel in range(self.channels):
+                    #    self.samples[channel].extend(samples[channel::self.channels])
 
             return np.array(self.samples)
 

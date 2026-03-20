@@ -1,9 +1,26 @@
 import numpy as np
 from scipy.fft import fft
-from scipy import signal
 
 
 class GCCProcessor:
+
+    """
+    The class is used for producing an array of correlation values between different microphone pairs,
+    to be later used in doa_estimator to estimate the direction from which the drone is comming from.  
+    
+    The program flow is as follows:
+
+    - Frame the sample signal into frames of length of 32 ms, with 50% overlap between each frame,
+    - Apply the hanning window function to reduce the spectral leckage,
+    - Apply Fourier frequency transfrom to each frame,
+    - Based on the number of pairs, generate microphone pairs in (i,j) format where all mics are paired with each other,
+    - Compute cross power spectrum between all micropohone pairs,
+    - filter out the freq components otside of the desired band and compute weighted p_hat of the cps to reduce the impact of noisy or unreliable 
+    components on delay estimation, then perform inverse FFT to obtain gcc functions,
+    - Return the gcc_array by running the process_signal() by sending to it the gathered samples and frequency sampling.
+    
+    """
+
     def __init__(self,frame_ms = 32):
         self.frame_ms = frame_ms
         self.mic_pairs = None
