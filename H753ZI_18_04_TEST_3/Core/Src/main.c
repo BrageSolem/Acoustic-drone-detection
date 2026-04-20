@@ -202,14 +202,6 @@ static void MX_CRC_Init(void);
 			mic4[i/4] = ((uint8_t*)src)[i + 3];
 		}
 	}
-	void PDM_Deinterleave_2_mics(const uint8_t *src, uint8_t *mic1, uint8_t *mic2, uint16_t len)
-		{
-			for (uint16_t i = 0; i < len; i += 1)
-			{
-				mic1[i/2] = ((uint8_t*)src)[i];
-				mic2[i/2] = ((uint8_t*)src)[i + 1];
-			}
-		}
 
 
 	void PCM_Deinterleave_2_mics(const int16_t *src, int16_t *mic1, int16_t *mic2)
@@ -340,21 +332,13 @@ int main(void)
 
 		  if (sai_pdm_full_ready) {
 			  sai_pdm_full_ready = 0;
+		  		      PDM_Filter(&(((uint8_t*)pdm_buffer)[0]), &(((int16_t*)pcm_buffer)[0]), &PDM_FilterHandler[0]);
+		  		      PDM_Filter(&(((uint8_t*)pdm_buffer)[1]), &(((int16_t*)pcm_buffer)[0]), &PDM_FilterHandler[1]);
 
-			  //PDM_Deinterleave_2_mics(&pdm_buffer[0], pdm_mic_1, pdm_mic_2, 256);
-			  //PDM_Filter(pdm_mic_1, pcm_mic_1, &PDM_FilterHandler[0]);
-			  //PDM_Filter(pdm_mic_2, pcm_mic_2, &PDM_FilterHandler[1]);
-
-			  //PDM_Filter(&pdm_buffer[0], &pcm_buffer[0], &PDM_FilterHandler[0]);
-			  //PDM_Filter(&pdm_buffer[1], &pcm_buffer[1], &PDM_FilterHandler[1]);
-			  PDM_Filter(&pdm_buffer[0], (int16_t*)&pcm_buffer[0], &PDM_FilterHandler[0]);
-			  PDM_Filter(&pdm_buffer[1], (int16_t*)&pcm_buffer[1], &PDM_FilterHandler[1]);
-
-			  if (CDC_Ready) {
-				  USB_Send_PCM_Interleaved_2CH(pcm_buffer, 16);
-				  //USB_Send_PCM_2CH(pcm_mic_1, pcm_mic_2, 16);
-			  }
-		  }
+		  		      if (CDC_Ready) {
+		  		          USB_Send_PCM_Interleaved_2CH(pcm_buffer, 16);
+		  		      }
+		  		  }
 
 		  /*
 		  if (sai_pdm_full_ready) {
@@ -602,7 +586,7 @@ static void MX_SAI1_Init(void)
   hsai_BlockA1.Init.AudioMode = SAI_MODEMASTER_RX;
   hsai_BlockA1.Init.DataSize = SAI_DATASIZE_16;
   hsai_BlockA1.Init.FirstBit = SAI_FIRSTBIT_MSB;
-  hsai_BlockA1.Init.ClockStrobing = SAI_CLOCKSTROBING_FALLINGEDGE;
+  hsai_BlockA1.Init.ClockStrobing = SAI_CLOCKSTROBING_RISINGEDGE;
   hsai_BlockA1.Init.Synchro = SAI_ASYNCHRONOUS;
   hsai_BlockA1.Init.OutputDrive = SAI_OUTPUTDRIVE_DISABLE;
   hsai_BlockA1.Init.NoDivider = SAI_MCK_OVERSAMPLING_DISABLE;
