@@ -1,0 +1,12 @@
+../Core/Src/main.c:97:16:DFSDM32_to_PCM16	3
+../Core/Src/main.c:111:13:PackAndSendFrame	3
+../Core/Src/main.c:134:6:CDC_TransmitCplt_FS	1
+../Core/Src/main.c:147:5:main	9
+../Core/Src/main.c:233:6:SystemClock_Config	3
+../Core/Src/main.c:282:13:MX_CRC_Init	2
+../Core/Src/main.c:308:13:MX_DFSDM1_Init	7
+../Core/Src/main.c:391:13:MX_DMA_Init	1
+../Core/Src/main.c:412:13:MX_GPIO_Init	1
+../Core/Src/main.c:473:6:HAL_DFSDM_FilterRegConvHalfCpltCallback	3
+../Core/Src/main.c:479:6:HAL_DFSDM_FilterRegConvCpltCallback	3
+../Core/Src/main.c:491:6:Error_Handler	1
