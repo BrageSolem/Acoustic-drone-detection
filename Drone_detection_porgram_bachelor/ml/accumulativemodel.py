@@ -13,7 +13,14 @@ class AccumulativeModel:
     can be updated with new data, without the need to retrain the model from scratch.
     """
 
-    def __init__(self, model_path):
+    def __init__(self, model_path="Accumulativemodel.joblib"):
+        """
+        Initialize the AccumulativeModel class
+
+        Defaults model to "Accumulativemodel.joblib"
+
+        :param model_path: The file path of the accumulative model, expects a .joblib file
+        """
         self.model = joblib.load(model_path)
         self.mfcc_extractor = mfcc_extraction.MFCCExtractor()
 

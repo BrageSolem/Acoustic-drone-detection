@@ -15,8 +15,14 @@ class CnnModel:
     can be updated with new data, without the need to retrain the model from scratch.
     """
 
-    def __init__(self):
-        self.model = load_model("CNNmodel.keras")
+    def __init__(self,model_path="CNNmodel.keras"):
+        """
+        Initialize the CNN model
+        Defaults model to "CNNmodel.keras
+
+        :param model_path: The path to the CNN model, expects a .keras file
+        """
+        self.model = load_model(model_path)
 
         self.labels = ["Drone", "Not_a_drone"]
 
