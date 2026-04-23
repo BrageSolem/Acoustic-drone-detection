@@ -54,7 +54,8 @@ while Run:
     gcc_array = gcc_processor.process_signal(samples, mfcc_extractor.fs)
     doa_estimator.set_gcc_array(gcc_array)
     doa_estimator.estimate_DOA()
-
+    Run = False
+    print(doa_estimator.estimated_azimuth_deg)
 
     """
     #Simple example of rule based drone detection

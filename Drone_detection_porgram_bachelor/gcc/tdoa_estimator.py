@@ -85,10 +85,13 @@ class TDOAEstimator():
         k = int(np.ceil(keep_frac * self.n_frames)) # keep 50% of frames
         indx = np.argsort(confidence_score_arr)[-k:] # from the last frame as the first one
         aggregated_time_delays = np.median(time_delays[indx])
+        return aggregated_time_delays
 
     def estimate_TDOA(self):
         self._compute_pair_geometry()
         self._compute_lags_per_pair()
+        self._estimate_frame_lags_for_pair()
+        return self._aggregate_frame_delays()
 
 
 

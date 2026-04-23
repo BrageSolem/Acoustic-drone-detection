@@ -78,7 +78,7 @@ class DOAEstimator():
         self.lag_min= [max(0,self.lag_center - max_lag_samples_pair) for max_lag_samples_pair in max_lag_samples]
         self.lag_max = [min(k_bins, self.lag_center + max_lag_samples_pair + 1) for max_lag_samples_pair in max_lag_samples]
     
-    def _delta_newton_approx(y,k):
+    def _delta_newton_approx(self,y,k):
         if k <= 0 or k >= len(y) - 1:
             return 0
 
@@ -107,7 +107,7 @@ class DOAEstimator():
         keep_frac = 0.5
         fs = self.gcc_processor.fs
 
-        for pair_indx in range(len(self.gcc_array.shape[1])):
+        for pair_indx in range(self.gcc_array.shape[1]):
 
             lag_min = self.lag_min[pair_indx]
             lag_max = self.lag_max[pair_indx]

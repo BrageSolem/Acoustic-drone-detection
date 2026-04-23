@@ -75,7 +75,7 @@ class GCCProcessor:
         cps = []
         n_frames = frames_fft.shape[0]
         n_mics = frames_fft.shape[1]
-        n_mics = self.n_mics
+        self.n_mics = n_mics
 
         if self.mic_pairs is None:
             self.mic_pairs = self.generate_mic_pairs(n_mics)

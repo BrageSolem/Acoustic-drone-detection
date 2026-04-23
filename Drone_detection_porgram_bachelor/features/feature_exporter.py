@@ -1,5 +1,5 @@
 import pandas as pd
-from mfcc_extraction import MFCCExtractor
+from features.mfcc_extraction import MFCCExtractor
 
 class FeatureExporter:
     """
