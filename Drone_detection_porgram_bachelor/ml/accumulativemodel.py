@@ -14,7 +14,7 @@ class AccumulativeModel:
     """
 
     def __init__(self, model_path):
-        self.model = models.load_model(model_path)
+        self.model = joblib.load(model_path)
         self.mfcc_extractor = mfcc_extraction.MFCCExtractor()
 
         self.labels = ["Drone", "Not_a_drone"]
@@ -103,7 +103,7 @@ class AccumulativeModel:
         """
         temp_list = [self.mfcc_extractor.extract_features(audio_file)]
         acum_prediction = self.model.predict(temp_list)
-        return self.lables[acum_prediction[0]]
+        return self.labels[acum_prediction[0]]
 
     def acum_predict(self, extracted_audio_file):
         """
@@ -114,5 +114,5 @@ class AccumulativeModel:
         :param extracted_audio_file: A list of accumulative values for a audio file
         :return: Label of audio file, ether "Drone" or "Not_a_drone
         """
-        return self.lables[self.model.predict([extracted_audio_file])]
+        return self.labels[self.model.predict([extracted_audio_file])[0]]
 
