@@ -13,7 +13,7 @@ class AccumulativeModel:
     can be updated with new data, without the need to retrain the model from scratch.
     """
 
-    def __init__(self, model_path="Accumulativemodel.joblib"):
+    def __init__(self, model_path="AccumulativeModel.joblib"):
         """
         Initialize the AccumulativeModel class
 
