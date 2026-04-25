@@ -6,6 +6,7 @@ from features.feature_visualizer import FeatureVisualizer
 from debug.stm32_usb_receiver_debug_tools import ReceiverDebug
 from gcc.gcc_processor import GCCProcessor
 from gcc.doa_estimator import DOAEstimator
+from gcc.doa_visualizer import DOAVisualizer
 
 import numpy as np
 
@@ -18,12 +19,13 @@ Run = True
 # Position vector for 4 microphones
 # They are planned to be placed on the same height, and around 10 cm from the center of the tower
 p_vector = np.array([
-    [-0.10,  0,     0.10,  0   ],  # x: mic1 left, mic3 right
-    [ 0,    -0.10,  0,     0.10],  # y: mic2 bottom, mic4 top
-    [ 0,     0,     0,     0   ]]) # z
-
+    [ 0.0,  0.0, -0.1,  0.1],  # x: mic3 left, mic4 right
+    [-0.1,  0.1,  0.0,  0.0],  # y: mic1 bottom, mic2 top
+    [ 0.0,  0.0,  0.0,  0.0]   # z
+])
 
 receiver = STM32UsbReceiver()
+
 
 wav_conversion = WavCreation()
 
@@ -33,6 +35,7 @@ mfcc_visualizer = FeatureVisualizer(extractor=mfcc_extractor)
 
 gcc_processor = GCCProcessor()
 doa_estimator = DOAEstimator(p_vector, gcc_processor)
+doa_visualizer = DOAVisualizer()
 
 #debug 
 receiver_debug = ReceiverDebug(receiver=receiver)
@@ -43,19 +46,22 @@ receiver.open_port()
 
 while Run:
     samples = receiver.record() # record the data sent by the stm32
-    
     wav_conversion.convert_into_wav(samples) # convert the samples into a wav format
-    
+    receiver_debug.debug_export(plot_debug=True)
+
     # features 
     features = mfcc_extractor.extract_features(audio_file="recordings/mic_recording.wav") # extract features such as mfcc, delta, delta2, log_mel_spec etc
     mfcc_exporter.df_features() # export the features into a df
-    
+    mfcc_visualizer.mel_spectrogram(receiver.start_time)
+    mfcc_visualizer.spectrogram(receiver.start_time)
+
     # Direction
     gcc_array = gcc_processor.process_signal(samples, mfcc_extractor.fs)
     doa_estimator.set_gcc_array(gcc_array)
     doa_estimator.estimate_DOA()
     Run = False
     print(doa_estimator.estimated_azimuth_deg)
+    doa_visualizer.visualize_doa(doa_estimator.estimated_azimuth_deg, doa_estimator.estimated_azimuth_rad, receiver.start_time)
 
     """
     #Simple example of rule based drone detection
@@ -65,7 +71,6 @@ while Run:
 
     is_drone = mfcc_std_mean < threshold    
     
-
     if i_drone:
         angle = doa_estimator.estimated_azimuth_deg
     else:

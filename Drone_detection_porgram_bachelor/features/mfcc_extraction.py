@@ -30,7 +30,7 @@ class MFCCExtractor:
 
 
 
-    def __init__(self, n_mfcc = 13, n_fft = 1024, hop_length = 250, win_length = 500, n_mels = 40):
+    def __init__(self, n_mfcc = 40, n_fft = 1024, hop_length = 250, win_length = 500, n_mels = 40):
         #####
         # CHANGE THE default values to suit the actual fs!!!!
         ##### 

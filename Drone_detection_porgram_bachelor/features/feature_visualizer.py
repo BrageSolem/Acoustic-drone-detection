@@ -1,4 +1,5 @@
 from features.mfcc_extraction import MFCCExtractor
+from receivers.stm32_usb_receiver import STM32UsbReceiver
 import matplotlib.pyplot as plt
 import librosa.display
 
@@ -14,19 +15,8 @@ class FeatureVisualizer:
 
     def __init__(self, extractor: MFCCExtractor):
         self.extractor = extractor
-            
-    def plot_signal_time(self):
-        signal = self.extractor.signal_time_domain
-        if signal is not None:
-            plt.figure(figsize=(10,4))
-            plt.plot(signal)
-            plt.xlabel("Time (s)")
-            plt.ylabel("Amplitude")
-            plt.title("Signal plot (time–amplitude view)")
-            plt.tight_layout()
-            plt.show()
 
-    def spectrogram(self):
+    def spectrogram(self, receive_time : STM32UsbReceiver ):
         if self.extractor.signal is not None:
             plt.figure(figsize=(10, 4))
             plt.specgram(self.extractor.signal,
@@ -40,11 +30,12 @@ class FeatureVisualizer:
             plt.title("Spectrogram (time–frequency view)")
             plt.colorbar(label="Power")
             plt.tight_layout()
+            plt.savefig(f'debug_figures/Debug_spectrogram{receive_time}.png')
             plt.show()
         else:
             raise RuntimeError("Signal not loaded. Run extract_features() first.")
 
-    def mel_spectrogram(self):
+    def mel_spectrogram(self, receive_time : STM32UsbReceiver ):
         if self.extractor.log_mel_spec is not None:
             plt.figure(figsize=(10, 4))
             librosa.display.specshow(
@@ -55,6 +46,7 @@ class FeatureVisualizer:
             plt.colorbar(label="dB")
             plt.title("Log-Mel Spectrogram")
             plt.tight_layout()
+            plt.savefig(f'debug_figures/Debug_mel_spectrogram{receive_time}.png')
             plt.show()
         else:
             raise RuntimeError("Signal not loaded. Run extract_features() first.")

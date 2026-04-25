@@ -104,7 +104,7 @@ class DOAEstimator():
         
         self.aggregated_time_delay_list = []
         self.cone_angles  = []
-        keep_frac = 0.5
+        keep_frac = 0.1
         fs = self.gcc_processor.fs
 
         for pair_indx in range(self.gcc_array.shape[1]):
@@ -113,8 +113,7 @@ class DOAEstimator():
             lag_max = self.lag_max[pair_indx]
 
             
-            segment = np.abs(self.gcc_array[:, pair_indx, :][:, lag_min:lag_max])
-            
+            segment = self.gcc_array[:, pair_indx, :][:, lag_min:lag_max]
             peaks = np.argmax(segment, axis=1)
             
             deltas = np.array([
@@ -125,8 +124,10 @@ class DOAEstimator():
             lag_samples = (lag_min + (peaks + deltas)) - self.lag_center
             peak_vals = segment[np.arange(self.n_frames), peaks]
             mean_vals = np.mean(segment, axis = 1)
-            confidence = peak_vals/(mean_vals + 1e-15)
-
+            median_values = np.median(segment, axis=1)
+            #confidence = peak_vals/(mean_vals + 1e-15)
+            confidence = peak_vals/(median_values + 1e-15)
+            
 
             time_delays = lag_samples/fs 
             
