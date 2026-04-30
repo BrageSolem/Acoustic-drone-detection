@@ -1,3 +1,6 @@
+##### NOT IN USE #########
+# THE CLASS WAS AN EARLY CONCEPT, NOT IN USE ANY LONGER.
+# USE THE DOA_ESTIMATOR 
 import numpy as np
 from gcc.gcc_processor import GCCProcessor
 
