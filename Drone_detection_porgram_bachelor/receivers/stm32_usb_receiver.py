@@ -21,7 +21,7 @@ class STM32UsbReceiver :
     - record() which records the frames and returns an array of samples 
     """
 
-    def __init__(self, port = "COM16", baud = 921600 , sync= b'\x5A\xA5', channels = 4, frame_samples = 16, duration_sec = 1, linux = False):
+    def __init__(self, port = "COM16", baud = 921600 , sync= b'\x5A\xA5', channels = 4, frame_samples = 16, duration_sec = 1, linux = False): #worked well with 1 sec
         if linux :
             self.port = b'/dev/ttyACM0'
         else :

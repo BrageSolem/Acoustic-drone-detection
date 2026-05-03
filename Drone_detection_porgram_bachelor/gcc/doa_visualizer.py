@@ -80,5 +80,5 @@ class DOAVisualizer():
         ax.set_title("Direction of Arrival Visualization")
         ax.grid(True)
         ax.legend()
-        plt.savefig(f'debug_figures/Debug_doa_estimation{receiver_time}.png')
-        plt.show()
+        plt.savefig(f'debug_figures/03_05_drone_sound_test_MAX_7m_sinc3_test3/Debug_doa_estimation{receiver_time}.png')
+        #plt.show()

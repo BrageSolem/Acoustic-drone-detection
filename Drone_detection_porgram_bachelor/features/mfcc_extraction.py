@@ -90,7 +90,7 @@ class MFCCExtractor:
         )
 
     def _power_mel_spec(self):
-        self.log_mel_spec = librosa.power_to_db(self.mel_spec, ref=np.max)
+        self.log_mel_spec = librosa.power_to_db(self.mel_spec, ref=np.max) # ref=np.max
 
     def _accumulate_the_stats(self):
         # mffcc mean - avg spectral shape, or how the sound looks like in the spectrum. Is it more "flat" or "steep" or "curved"

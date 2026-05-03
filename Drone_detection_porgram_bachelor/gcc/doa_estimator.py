@@ -14,7 +14,7 @@ class DOAEstimator():
             - Find the peak of the gcc function, which represents the estimated delay,
             - Apply delta_newton interpolation to estimate the actual peak in proximity of the integer peak,
             - Compute the confidence score based on the ratio between the segmnet peak value, and the avg values present in the segment,
-        - Keep 50% of the most reliable frames  in the segment,
+        - Keep 90% of the most reliable frames  in the segment,
         - Aggregate the delays,
     - Convert TDOAs into cone angles,
     - Perform a grid search over possible azimuth agnles:
@@ -104,7 +104,7 @@ class DOAEstimator():
         
         self.aggregated_time_delay_list = []
         self.cone_angles  = []
-        keep_frac = 0.1
+        keep_frac = 0.1 # used 0.1 before
         fs = self.gcc_processor.fs
 
         for pair_indx in range(self.gcc_array.shape[1]):

@@ -1,0 +1,1 @@
+1. sound source placed behind and at the left, should give -180 and 90, source behind was ca 3m away, source to left was 7m away
