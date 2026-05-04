@@ -31,8 +31,8 @@ class ReceiverDebug:
                 print(f"Total samples mic{channel+1}: {len(samples_dict[name])}")
             
             plt.tight_layout()
-            plt.savefig(f'debug_figures/03_05_drone_sound_test_MAX_7m_sinc3_test3/Debug_receiver_data{int(self.receiver.start_time)}.png')
+            plt.savefig(f'debug_figures/04_05_drone_test_riktig_plassering/Debug_receiver_data{int(self.receiver.start_time)}.png')
             #plt.show()
             
         df = pd.DataFrame(samples_dict)
-        df.to_csv(f"debug_figures/03_05_drone_sound_test_MAX_7m_sinc3_test3/mic_recording_usb{self.receiver.start_time}.csv", index=False) 
+        df.to_csv(f"debug_figures/04_05_drone_test_riktig_plassering/mic_recording_usb{self.receiver.start_time}.csv", index=False) 

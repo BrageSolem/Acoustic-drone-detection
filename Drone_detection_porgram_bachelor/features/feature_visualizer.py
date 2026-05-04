@@ -30,7 +30,7 @@ class FeatureVisualizer:
             plt.title("Spectrogram (time–frequency view)")
             plt.colorbar(label="Power")
             plt.tight_layout()
-            plt.savefig(f'debug_figures/03_05_drone_sound_test_MAX_7m_sinc3_test3/Debug_spectrogram{receive_time}.png')
+            plt.savefig(f'debug_figures/04_05_drone_test_riktig_plassering/Debug_spectrogram{receive_time}.png')
             #plt.show()
         else:
             raise RuntimeError("Signal not loaded. Run extract_features() first.")
@@ -46,7 +46,7 @@ class FeatureVisualizer:
             plt.colorbar(label="dB")
             plt.title("Log-Mel Spectrogram")
             plt.tight_layout()
-            plt.savefig(f'debug_figures/03_05_drone_sound_test_MAX_7m_sinc3_test3/Debug_mel_spectrogram{receive_time}.png')
+            plt.savefig(f'debug_figures/04_05_drone_test_riktig_plassering/Debug_mel_spectrogram{receive_time}.png')
             #plt.show()
         else:
             raise RuntimeError("Signal not loaded. Run extract_features() first.")

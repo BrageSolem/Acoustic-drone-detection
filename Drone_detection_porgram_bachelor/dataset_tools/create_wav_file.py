@@ -13,7 +13,7 @@ class WavCreation:
         pass
 
     def convert_into_wav(self, samples : np.ndarray, receive_time : STM32UsbReceiver, duration : STM32UsbReceiver):
-        filename =f"debug_figures/03_05_drone_sound_test_MAX_7m_sinc3_test3/mic_recording{receive_time}.wav"
+        filename =f"debug_figures/04_05_drone_test_riktig_plassering/mic_recording{receive_time}.wav"
         effective_fs = len(samples[0])/ duration
         #print([len(ch) for ch in samples])
         #print(samples.shape)
