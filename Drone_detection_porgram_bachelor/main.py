@@ -7,6 +7,8 @@ from debug.stm32_usb_receiver_debug_tools import ReceiverDebug
 from gcc.gcc_processor import GCCProcessor
 from gcc.doa_estimator import DOAEstimator
 from gcc.doa_visualizer import DOAVisualizer
+from ml.accumulativemodel import AccumulativeModel
+from ml.cnnmodel import CnnModel
 
 import numpy as np
 
@@ -46,7 +48,10 @@ gcc_processor = GCCProcessor()
 doa_estimator = DOAEstimator(p_vector, gcc_processor)
 doa_visualizer = DOAVisualizer()
 
-#debug 
+accumulative_model = AccumulativeModel()
+cnn_model = CnnModel()
+
+#debug
 receiver_debug = ReceiverDebug(receiver=receiver)
 
 receiver.open_port()
@@ -81,6 +86,15 @@ while Run:
     print(f"Iteration: {i}")
     # adds a lot of overhead, comment out during live testing
     doa_visualizer.visualize_doa(doa_estimator.estimated_azimuth_deg, doa_estimator.estimated_azimuth_rad, receiver.start_time)
+
+    # Sound classification
+    cnn_predict = cnn_model.cnn_predict(f"mic_recording{receiver.start_time}.wav") #Fix, add permanent non debug location
+    accumulative_predict = accumulative_model.acum_predict(features)
+
+    #Debug
+    print(f"CNN prediction: {cnn_predict}")
+    print(f"Accumulative prediction: {accumulative_predict}")
+
     if i == 45:
         Run = False
     """
