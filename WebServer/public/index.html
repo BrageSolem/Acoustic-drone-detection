@@ -15,10 +15,51 @@
 <body>
 
 <div class="sidebar">
-    <h3>Noise Sounds List</h3>
-    <div>Bird</div>
-    <div>Plane</div>
-    <div>Wind</div>
+    <svg viewBox="0 0 300 300">
+        <circle
+                id="mainCircle"
+                cx="150"
+                cy="150"
+                r="100"
+                fill="none"
+                stroke="black"
+                stroke-width="3"
+        />
+
+        <line
+                id="radiusLine"
+                x1="150"
+                y1="150"
+                x2="250"
+                y2="150"
+                stroke="red"
+                stroke-width="3"
+        />
+
+        <circle
+                id="centerDot"
+                cx="150"
+                cy="150"
+                r="5"
+                fill="black"
+        />
+
+        <circle
+                id="movingDot"
+                cx="250"
+                cy="150"
+                r="6"
+                fill="blue"
+        />
+    </svg>
+    <label>
+        <select id ="debugDropdown">
+            <option value="up">Up</option>
+            <option value="right">Right</option>
+            <option value="down">Down</option>
+            <option value="left">Left</option>
+        </select>
+    </label>
 </div>
 
 <div class="center">

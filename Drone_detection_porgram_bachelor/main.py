@@ -9,6 +9,7 @@ from gcc.doa_estimator import DOAEstimator
 from gcc.doa_visualizer import DOAVisualizer
 from ml.accumulativemodel import AccumulativeModel
 from ml.cnnmodel import CnnModel
+from utilis.drone_client import DroneSocketClient
 
 import numpy as np
 
@@ -51,12 +52,18 @@ doa_visualizer = DOAVisualizer()
 accumulative_model = AccumulativeModel()
 cnn_model = CnnModel()
 
+drone_client = DroneSocketClient(server_url='http://localhost:3001',on_init=on_init, on_update=on_update)
+
 #debug
 receiver_debug = ReceiverDebug(receiver=receiver)
 
 receiver.open_port()
 # add history buffer for 3 wav files back in time ?
 i = 0
+try:
+    drone_client.connect()
+except Exception as e:
+    print('connection error:', e)
 
 while Run:
     i+=1
@@ -86,6 +93,8 @@ while Run:
         doa_estimator.estimate_DOA()
         print(f"Azimuth this iteration is: {doa_estimator.estimated_azimuth_deg}")
         print(f"Iteration: {i}")
+        drone_client.emit_drone("drone")
+        drone_client.emit_degree(doa_estimator.estimated_azimuth_deg)
         # adds a lot of overhead, comment out during live testing
         #doa_visualizer.visualize_doa(doa_estimator.estimated_azimuth_deg, doa_estimator.estimated_azimuth_rad, #receiver.start_time)
         

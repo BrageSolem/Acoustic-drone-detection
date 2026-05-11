@@ -1,6 +1,7 @@
 const socket = io();
 let drones = [];
 let markers = [];
+let degree = 0;
 const map = L.map('map').setView([0, 0], 2);
 
 window.addEventListener("load",init)
@@ -13,6 +14,10 @@ socket.on("updateDrones", (data) => {
     drones = data;
     render();
 });
+
+socket.on("newDegree", (degree) => {
+    updateDiagram(degree);
+})
 function init() {
     showMyLocation();
     startCameraFeed();
@@ -132,3 +137,42 @@ function render() {
         }
     });
 }
+
+function updateDiagram(degrees) {
+    const center_x = 150;
+    const center_y = 150;
+    const radius = 100;
+    degrees = parseFloat(degrees);
+    let radians = degrees * (Math.PI / 180);
+    const x = center_x + radius * Math.cos(radians);
+    const y = center_y + radius * Math.sin(radians);
+
+    const dot = document.getElementById("movingDot");
+    dot.setAttribute("cx", x);
+    dot.setAttribute("cy", y);
+
+    const line = document.getElementById("radiusLine");
+    line.setAttribute("x2", x);
+    line.setAttribute("y2", y);
+}
+
+
+const debugDropdown = document.getElementById("debugDropdown");
+debugDropdown.addEventListener("change", (event) => {
+    let value = event.target.value;
+    switch (value){
+        case "up":
+            value = Math.PI * 1.5;
+            break;
+        case "right":
+            value = 0;
+            break;
+        case "down":
+            value = Math.PI/2;
+            break;
+        case "left":
+            value = Math.PI;
+            break;
+
+    }
+    updateDiagram(value)});

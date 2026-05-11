@@ -53,6 +53,10 @@ io.on("connection", (socket) => {
             ps.emit("syncDrones", identifiedDrones)
         );
     });
+
+    socket.on("newDegree",degree => {
+        io.emit("updateDegree", degree);
+    })
 });
 
 server.listen(PORT, () => {
