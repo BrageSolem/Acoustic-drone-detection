@@ -123,6 +123,7 @@ class DOAEstimator():
 
             lag_samples = (lag_min + (peaks + deltas)) - self.lag_center
             peak_vals = segment[np.arange(self.n_frames), peaks]
+            # chat gpt
             mean_vals = np.mean(segment, axis = 1)
             median_values = np.median(segment, axis=1)
             #confidence = peak_vals/(mean_vals + 1e-15)
@@ -137,16 +138,15 @@ class DOAEstimator():
             aggregated_time_delay = np.median(time_delays[indx])
             self.aggregated_time_delay_list.append(aggregated_time_delay)
             
-            baseline_vec_norm = self.baseline_vec_norms[pair_indx]
-
-            cos_arg = np.clip((self.speed_of_sound * aggregated_time_delay) / baseline_vec_norm, -1, 1) # must ensure the cos will not be bigger or smaller then 1 or -1 
-            cone_angle_rad = np.arccos(cos_arg)
-            self.cone_angles.append(cone_angle_rad)
+            #baseline_vec_norm = self.baseline_vec_norms[pair_indx]
+            #cos_arg = np.clip((self.speed_of_sound * aggregated_time_delay) / baseline_vec_norm, -1, 1) # must ensure the cos will not be bigger or smaller then 1 or -1 
+            #cone_angle_rad = np.arccos(cos_arg)
+            #self.cone_angles.append(cone_angle_rad)
 
             # Consider adding a filter to the angle, if the angle will be too unstable
 
         self.aggregated_time_delay_list = np.array(self.aggregated_time_delay_list)
-        self.cone_angles = np.array(self.cone_angles)
+       # self.cone_angles = np.array(self.cone_angles)
 
     def _estimate_azimuth(self): # only finds the azimuth of the target, not the elevation
         if self.aggregated_time_delay_list is None:
