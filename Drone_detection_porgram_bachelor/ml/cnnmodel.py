@@ -13,6 +13,11 @@ class CnnModel:
     """
     Cnn Model trained on a dataset of drone and white noise audio,
     can be updated with new data, without the need to retrain the model from scratch.
+
+    Default model is "CNNmodel.keras", which is a pre trained model, since training the model takes a long time.
+    The training data is supplemented with data real data from microphone array, this is not showed in the code,
+    since the files used; debug_figures contain more the sound files. The training was done with the update_training function,
+     which is shown in the code, but not run in the program, since it takes a long time to run.
     """
 
     def __init__(self,model_path="CNNmodel.keras"):
@@ -111,7 +116,7 @@ class CnnModel:
         model.fit(
             x,
             y,
-            epochs=20,
+            epochs=50,
             batch_size=32,
             validation_split=0.2
         )
@@ -149,4 +154,9 @@ class CnnModel:
                 y = 1
         else:
             raise ValueError(f"Invalid label: {label}. Valid labels are: {self.labels}")
-        self.model.fit(x, y, epochs=5)
+        self.model.fit(x,
+                       y,
+                       epochs=50,
+                       batch_size=32,
+                       validation_split=0.2
+                       )

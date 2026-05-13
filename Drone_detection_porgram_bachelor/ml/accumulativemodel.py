@@ -10,7 +10,10 @@ import mfcc_extraction
 class AccumulativeModel:
     """
     Accumulative Model trained on audio of white noise and drone audio,
-    can be updated with new data, without the need to retrain the model from scratch.
+    can not be updated with new data, to update the model with new data, the model needs to be retrained from scratch.
+
+    The Default model is trained on both public data and audio files from microphone array, under debug_figures,
+     only the old training method for public data given files under debug figures contain more then audio files.
     """
 
     def __init__(self, model_path="AccumulativeModel.joblib"):
@@ -53,51 +56,10 @@ class AccumulativeModel:
             x_acum.append(temp_extractor.extract_features(file_path))
             y_acum.append(label)
 
-        acum_model = sk.tree.DecisionTreeClassifier()
+        acum_model = sk.tree.DecisionTreeClassifier(max_depth = 6,min_samples_leaf=20,random_state=42)
         acum_model.fit(x_acum, y_acum)
         return acum_model
 
-    def check_label_validy(self, label):
-        """
-        Check if label is valid and converts to correct int value
-
-        :param label: label to be checked
-        :return: 0 if label is "Drone", 1 if label is "Not_a_drone"
-        """
-        if label not in self.labels:
-            raise ValueError(f"Invalid label: {label}. Valid labels are: {self.labels}")
-        if label == self.labels[0]:
-            return 0
-        else:
-            return 1
-
-    def update_training_internal_extract(self, audio_file, label):
-        """
-        Add new data to the accumulative Model.
-
-        The features are extracted internally in this function, using the mfcc_extractor.
-
-        :param audio_file: a .wav file
-        :param label: Label of audio file, Has to be ether "Drone" or "Not_a_drone"
-        :return:
-        """
-        temp_list = [self.mfcc_extractor.extract_features(audio_file)]
-        temp_label = self.check_label_validy(label)
-        self.model.partial_fit(temp_list, temp_label)
-
-    def update_training(self, extracted_audio_file, label):
-        """
-        Add new data to the accumulative Model.
-
-        The features are extracted externally,
-        and passed as a list of accumulative values for a audio file.
-
-        :param extracted_audio_file: A list of accumulative values for a audio file
-        :param label: Label of audio file, Has to be ether "Drone" or "Not_a_drone"
-        :return: Void
-        """
-        temp_list = [self.mfcc_extractor.extract_features(extracted_audio_file)]
-        self.model.partial_fit(temp_list, [label])
 
     def predict_internal_extract(self, audio_file):
         """
