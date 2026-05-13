@@ -82,17 +82,16 @@ class DOAEstimator():
         if k <= 0 or k >= len(y) - 1:
             return 0
 
-        y0 = y[k - 1] 
-        y1 = y[k]
-        y2 = y[k + 1]
+        y_minus = y[k - 1]  # y(-1)
+        y_zero = y[k]       # y(0)
+        y_plus = y[k + 1]   # y(1)
 
-        b = 0.5 * (y2 - y0) # centered approx of f'(x) when h = 1
+        denominator = 2 * (y_minus - 2 * y_zero + y_plus)
 
-        a = y2 + y0 - 2*y1
-        if np.abs(a) < 1e-15: # in case a is (almost) 0, to prevent division by 0
-            return 0
+        if np.abs(denominator) < 1e-15:
+        return 0.0
     
-        delta = -b / a
+        delta = (y_minus - y_plus) / denominator
         return float(delta)
 
     def _estimate_tdoa(self): 
