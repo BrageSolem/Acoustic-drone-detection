@@ -12,7 +12,7 @@ class DOAEstimator():
         - limit the lag search range based on the physical constraints of the system,
         - For each frame:
             - Find the peak of the gcc function, which represents the estimated delay,
-            - Apply delta_newton interpolation to estimate the actual peak in proximity of the integer peak,
+            - Apply parabolic interpolation to estimate the actual peak in proximity of the integer peak,
             - Compute the confidence score based on the ratio between the segmnet peak value, and the avg values present in the segment,
         - Keep 10% of the most reliable frames  in the segment,
         - Aggregate the delays,
@@ -78,7 +78,7 @@ class DOAEstimator():
         self.lag_min= [max(0,self.lag_center - max_lag_samples_pair) for max_lag_samples_pair in max_lag_samples]
         self.lag_max = [min(k_bins, self.lag_center + max_lag_samples_pair + 1) for max_lag_samples_pair in max_lag_samples]
     
-    def _delta_newton_approx(self,y,k):
+    def _parabolic_interpolation(self,y,k):
         if k <= 0 or k >= len(y) - 1:
             return 0
 
@@ -117,7 +117,7 @@ class DOAEstimator():
             peaks = np.argmax(segment, axis=1)
             
             deltas = np.array([
-                self._delta_newton_approx(segment[n], peaks[n])
+                self._parabolic_interpolation(segment[n], peaks[n])
                 for n in range(self.n_frames)
             ])
 
