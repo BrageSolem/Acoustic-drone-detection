@@ -10,7 +10,7 @@ from gcc.doa_visualizer import DOAVisualizer
 from ml.accumulativemodel import AccumulativeModel
 from ml.cnnmodel import CnnModel
 from utilis.drone_client import DroneSocketClient
-
+import pandas as pd
 import numpy as np
 
 "WORK IN PROGRESS !!"
@@ -41,7 +41,7 @@ receiver = STM32UsbReceiver()
 
 wav_conversion = WavCreation()
 
-mfcc_extractor = MFCCExtractor()
+mfcc_extractor = MFCCExtractor(n_mfcc = 13)
 mfcc_exporter = FeatureExporter(extractor=mfcc_extractor)
 mfcc_visualizer = FeatureVisualizer(extractor=mfcc_extractor)
 
@@ -49,10 +49,20 @@ gcc_processor = GCCProcessor()
 doa_estimator = DOAEstimator(p_vector, gcc_processor)
 doa_visualizer = DOAVisualizer()
 
-accumulative_model = AccumulativeModel()
-cnn_model = CnnModel()
+accumulative_model = AccumulativeModel(model_path="ml/AccumulativeModel.joblib")
+#for use in tensorflow <2.10
+cnn_model = CnnModel(model_path="ml/CNN_model_aa.h5")
 
-drone_client = DroneSocketClient(server_url='http://localhost:3001',on_init=on_init, on_update=on_update)
+drone_client = DroneSocketClient(server_url='http://localhost:3000')
+cnn_labelhash = {}
+acum_labelhash = {}
+cnn_labelhash["Drone"] = 0
+cnn_labelhash["Not_a_drone"] = 0
+acum_labelhash["Drone"] = 0
+acum_labelhash["Not_a_drone"] = 0
+
+
+azimuth_df = pd.DataFrame(columns=["Time", "Azimuth"])
 
 #debug
 receiver_debug = ReceiverDebug(receiver=receiver)
@@ -76,17 +86,18 @@ while Run:
     receiver_debug.debug_export(plot_debug=True)
 
     # features 
-    features = mfcc_extractor.extract_features(audio_file=f"debug_figures/04_05_drone_test_riktig_plassering/mic_recording{receiver.start_time}.wav") # extract features such as mfcc, delta, delta2, log_mel_spec etc
+    features = mfcc_extractor.extract_features(audio_file=f"debug_figures/14_05 test/mic_recording{receiver.start_time}.wav") # extract features such as mfcc, delta, delta2, log_mel_spec etc
     mfcc_exporter.df_features() # export the features into a df
     # adds a lot of overhead, comment out during live testing
-    #mfcc_visualizer.mel_spectrogram(receiver.start_time)
+    mfcc_visualizer.mel_spectrogram(receiver.start_time)
     #mfcc_visualizer.spectrogram(receiver.start_time)
-    
+    print(features.size)
     # Sound classification
-    cnn_predict = cnn_model.cnn_predict(f"debug_figures/04_05_drone_test_riktig_plassering/mic_recording{receiver.start_time}.wav") #Fix, add permanent non debug location
+    cnn_predict = cnn_model.cnn_predict(f"debug_figures/14_05 test/mic_recording{receiver.start_time}.wav") #Fix, add permanent non debug location
     accumulative_predict = accumulative_model.acum_predict(features)
-    
-    if cnn_predict == "Drone" and accumulative_predict == "Drone":
+    #accumulative_predict = accumulative_model.predict_internal_extract(f"debug_figures/14_05 test/mic_recording{receiver.start_time}.wav")
+
+    if cnn_predict == "Drone" or accumulative_predict == "Drone":
         # Direction
         gcc_array = gcc_processor.process_signal(samples, mfcc_extractor.fs)
         doa_estimator.set_gcc_array(gcc_array)
@@ -96,10 +107,15 @@ while Run:
         drone_client.emit_drone("drone")
         drone_client.emit_degree(doa_estimator.estimated_azimuth_deg)
         # adds a lot of overhead, comment out during live testing
-        #doa_visualizer.visualize_doa(doa_estimator.estimated_azimuth_deg, doa_estimator.estimated_azimuth_rad, #receiver.start_time)
-        
-    if i == 45: # allows for 45 iterations, before the program terminates
-        Run = False   
+        doa_visualizer.visualize_doa(doa_estimator.estimated_azimuth_deg, doa_estimator.estimated_azimuth_rad, receiver.start_time)
+        azimuth_df.loc[i] = [
+                receiver.start_time,
+                doa_estimator.estimated_azimuth_deg
+            ]
+
+    if i == 30: # allows for 45 iterations, before the program terminates
+        Run = False
+        azimuth_df.to_csv(f"debug_figures/14_05 test/azimuth_timestamps.csv", index = False)
     # debug 
     print(f"CNN prediction: {cnn_predict}")
     print(f"Accumulative prediction: {accumulative_predict}")
@@ -111,7 +127,12 @@ while Run:
         Run = False
     if debug_stm32:
         receiver_debug.debug_export(plot_debug=True)
-        Run = False 
-    
+        Run = False
+
+    cnn_labelhash[cnn_predict] = (cnn_labelhash[cnn_predict] + 1)
+    acum_labelhash[accumulative_predict] = (acum_labelhash[accumulative_predict] + 1)
+
+print(cnn_labelhash)
+print(acum_labelhash)
 #receiver.close_port()
 #receiver.debug_export(plot_debug = True)
