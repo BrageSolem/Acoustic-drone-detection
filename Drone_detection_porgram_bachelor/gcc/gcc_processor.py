@@ -94,7 +94,7 @@ class GCCProcessor:
         # frame_cps shape (frame, mic pair, cps)
         return np.array(cps)
         
-    def _p_hat_weighted_gcc(self,cps_array :np.ndarray, fs, n_samples_per_frame, freq_low = 100, freq_high = 6000, beta = 0.5, eps = 1e-13, use_adaptive_beta = False ):
+    def _p_hat_weighted_gcc(self,cps_array :np.ndarray, fs, n_samples_per_frame, freq_low = 80, freq_high = 6000, beta = 0.5, eps = 1e-13, use_adaptive_beta = False ):
         freq = np.fft.fftfreq(n_samples_per_frame, d = 1/fs) # array of freq for each fft bin
         band = (freq_low <= np.abs(freq)) & (np.abs(freq) <= freq_high) # boolean mask to remove unwanted freq
         mag = np.abs(cps_array) + eps
