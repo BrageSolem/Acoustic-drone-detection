@@ -19,7 +19,7 @@ class DroneSocketClient:
       client.disconnect()
     """
 
-    def __init__(self, server_url='http://localhost:3001', on_init=None, on_update=None):
+    def __init__(self, server_url='http://localhost:3000', on_init=None, on_update=None):
         self.server_url = server_url
         self.on_init = on_init
         self.on_update = on_update

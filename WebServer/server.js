@@ -34,6 +34,11 @@ function connectToPeers() {
             io.emit("updateDrones", identifiedDrones);
         });
 
+        socket.on("syncFrame", (b64) => {
+            // relay peer frame to connected web clients
+            io.emit("frame", b64);
+        });
+
         peerSockets.push(socket);
     });
 }
@@ -57,9 +62,18 @@ io.on("connection", (socket) => {
     socket.on("newDegree",degree => {
         io.emit("updateDegree", degree);
     })
+
+    socket.on("newFrame", (b64) => {
+        io.emit("frame", b64);
+        peerSockets.forEach(ps => ps.emit("syncFrame", b64));
+    });
 });
 
-server.listen(PORT, () => {
-    console.log(`${PI_ID} running on port ${PORT}`);
-    setTimeout(connectToPeers, 2000);
-});
+if (require.main === module) {
+    server.listen(PORT, () => {
+        console.log(`${PI_ID} running on port ${PORT}`);
+        setTimeout(connectToPeers, 2000);
+    });
+} else {
+    module.exports = { server, io, connectToPeers, getIdentifiedDrones: () => identifiedDrones, PI_ID };
+}

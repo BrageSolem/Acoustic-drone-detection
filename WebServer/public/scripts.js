@@ -18,6 +18,11 @@ socket.on("updateDrones", (data) => {
 socket.on("newDegree", (degree) => {
     updateDiagram(degree);
 })
+
+socket.on("frame", (b64) => {
+    const videoElement = document.getElementById('droneVideo');
+    videoElement.src = `data:image/jpeg;base64,${b64}`;
+})
 function init() {
     showMyLocation();
     startCameraFeed();
@@ -142,6 +147,7 @@ function updateDiagram(degrees) {
     const center_x = 150;
     const center_y = 150;
     const radius = 100;
+    console.log("updateDiagram kjører")
     degrees = parseFloat(degrees);
     let radians = degrees * (Math.PI / 180);
     const x = center_x + radius * Math.cos(radians);
@@ -154,25 +160,13 @@ function updateDiagram(degrees) {
     const line = document.getElementById("radiusLine");
     line.setAttribute("x2", x);
     line.setAttribute("y2", y);
+
+    const degreeText =document.getElementById("DegreeText")
+    degreeText.value = `Degree: ${degrees}`
 }
 
 
-const debugDropdown = document.getElementById("debugDropdown");
-debugDropdown.addEventListener("change", (event) => {
-    let value = event.target.value;
-    switch (value){
-        case "up":
-            value = Math.PI * 1.5;
-            break;
-        case "right":
-            value = 0;
-            break;
-        case "down":
-            value = Math.PI/2;
-            break;
-        case "left":
-            value = Math.PI;
-            break;
 
-    }
-    updateDiagram(value)});
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { getCurrentPosition, addDrone, updateDiagram, render, init, startCameraFeed };
+}
